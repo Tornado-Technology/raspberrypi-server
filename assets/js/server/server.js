@@ -7,13 +7,13 @@ export default class Server {
 
   static start(port) {
     console.log('Server startig...')
-    this.instance = createServer(this.#requestListener)
+    this.instance = createServer(this.requestListener)
     this.instance.listen(port, () => {
       console.log(`Server start on http://raspberrypi.local:${port}.`)
     });
   }
   
-  static #requestListener(socket) {
+  static requestListener(socket) {
     console.log(`Socket connected from ${socket.remoteAddress}:${socket.remotePort}.`);
     const client = this.createClient(socket);
 

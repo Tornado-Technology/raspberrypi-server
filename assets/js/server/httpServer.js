@@ -4,27 +4,26 @@ import { dirname } from 'path'
 import fs from 'fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const port = 8080;
 
 export default class HttpServer {
   static instance = undefined;
   
   static start(port) {
     console.log('HTTP Server starting...');
-    this.instance = createServer(this.#requestListener);  
+    this.instance = createServer(HttpServer.requestListener);  
     this.instance.listen(port, () => {
       console.log(`HTTP Server start on http://raspberrypi.local:${port}`);
     });
   }
 
-  static #requestListener(req, res) {
-    const path = `${__dirname}${req.url === '/' ? '/index.html' : req.url}`;
-    const contentType = this.#getContentType(path);
+  static requestListener(req, res) {
+    const path = `${__dirname}${req.url === '/' ? '/../../../index.html' : `/../../../${req.url}`}`;
+    const contentType = HttpServer.getContentType(path);
 
     // Load
     fs.readFile(path, (err, data) =>  {
       if (err) {
-        this.#load404Page(res);
+        HttpServer.load404Page(res);
       }
       
       res.writeHead(200, {
@@ -33,8 +32,8 @@ export default class HttpServer {
       res.end(data);
     });
   }
-
-  static #getContentType(path) {
+  
+  static getContentType(path) {
     const pathSplit = path.split('.')
     const extension = pathSplit[pathSplit.length - 1];
     let contentType = '';
@@ -65,7 +64,7 @@ export default class HttpServer {
     return contentType;
   }
 
-  static #load404Page(res) {
+  static load404Page(res) {
     fs.readFile(`${__dirname}/404.html`, (err, data) => {
       if (err) {
         res.writeHead(500);
