@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "node assets/js/server/index.js"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "nodemon": "^2.0.20",
+    "onoff": "^6.0.3",
+    "socket.io": "^4.5.2"
+  }
+}
